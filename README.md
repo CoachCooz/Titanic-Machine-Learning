@@ -490,10 +490,10 @@ train.describe(include=['O'])
     </tr>
     <tr>
       <td>top</td>
-      <td>Panula, Mr. Jaako Arnold</td>
+      <td>Sage, Miss. Constance Gladys</td>
       <td>male</td>
-      <td>CA. 2343</td>
-      <td>B96 B98</td>
+      <td>1601</td>
+      <td>C23 C25 C27</td>
       <td>S</td>
     </tr>
     <tr>
@@ -766,7 +766,7 @@ survived.map(plt.hist, 'Age', bins=15)
 
 
 
-    <seaborn.axisgrid.FacetGrid at 0x7fef871bb510>
+    <seaborn.axisgrid.FacetGrid at 0x7fd1e8f68e10>
 
 
 
@@ -801,7 +801,7 @@ grid_1.add_legend()
 
 
 
-    <seaborn.axisgrid.FacetGrid at 0x7fef87a2ba90>
+    <seaborn.axisgrid.FacetGrid at 0x7fd1e9b1ac10>
 
 
 
@@ -823,7 +823,7 @@ grid_2.add_legend()
 
 
 
-    <seaborn.axisgrid.FacetGrid at 0x7fef8803b2d0>
+    <seaborn.axisgrid.FacetGrid at 0x7fd1e9d80b50>
 
 
 
@@ -1269,6 +1269,446 @@ train.head()
       <td>3</td>
       <td>0</td>
       <td>35.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>8.0500</td>
+      <td>S</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+grid_3 = sns.FacetGrid(train, row='Pclass', col='Sex', height=2.5, aspect=2.0)
+grid_3.map(plt.hist, 'Age', alpha=.5, bins=20)
+grid_3.add_legend()
+```
+
+
+
+
+    <seaborn.axisgrid.FacetGrid at 0x7fd1ea652850>
+
+
+
+
+![png](output_23_1.png)
+
+
+
+```python
+guess_age = np.zeros((2,3))
+guess_age
+```
+
+
+
+
+    array([[0., 0., 0.],
+           [0., 0., 0.]])
+
+
+
+
+```python
+for df in complete:
+    for i in range(0, 2):
+        for j in range(0, 3):
+            guess_df = df[(df['Sex'] == i) & \
+                                  (df['Pclass'] == j+1)]['Age'].dropna()
+
+
+            age_guess = guess_df.median()
+
+            guess_age[i,j] = int(age_guess/0.5 + 0.5 ) * 0.5
+            
+    for i in range(0, 2):
+        for j in range(0, 3):
+            df.loc[(df.Age.isnull()) & (df.Sex == i) & (df.Pclass == j+1),\
+                    'Age'] = guess_age[i,j]
+
+    df['Age'] = df['Age'].astype(int)
+
+train.head()
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Survived</th>
+      <th>Pclass</th>
+      <th>Sex</th>
+      <th>Age</th>
+      <th>SibSp</th>
+      <th>Parch</th>
+      <th>Fare</th>
+      <th>Embarked</th>
+      <th>Title</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>22</td>
+      <td>1</td>
+      <td>0</td>
+      <td>7.2500</td>
+      <td>S</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>38</td>
+      <td>1</td>
+      <td>0</td>
+      <td>71.2833</td>
+      <td>C</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>1</td>
+      <td>3</td>
+      <td>1</td>
+      <td>26</td>
+      <td>0</td>
+      <td>0</td>
+      <td>7.9250</td>
+      <td>S</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>35</td>
+      <td>1</td>
+      <td>0</td>
+      <td>53.1000</td>
+      <td>S</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>35</td>
+      <td>0</td>
+      <td>0</td>
+      <td>8.0500</td>
+      <td>S</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+train['AgeCorr'] = pd.cut(train['Age'], 5)
+train[['AgeCorr', 'Survived']].groupby(['AgeCorr'], as_index=False).mean().sort_values(
+     by='AgeCorr', ascending=True)
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>AgeCorr</th>
+      <th>Survived</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>(-0.08, 16.0]</td>
+      <td>0.550000</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>(16.0, 32.0]</td>
+      <td>0.337374</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>(32.0, 48.0]</td>
+      <td>0.412037</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>(48.0, 64.0]</td>
+      <td>0.434783</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>(64.0, 80.0]</td>
+      <td>0.090909</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+for df in complete:    
+    df.loc[df['Age'] <= 16, 'Age'] = 0
+    df.loc[(df['Age'] > 16) & (df['Age'] <= 32), 'Age'] = 1
+    df.loc[(df['Age'] > 32) & (df['Age'] <= 48), 'Age'] = 2
+    df.loc[(df['Age'] > 48) & (df['Age'] <= 64), 'Age'] = 3
+    df.loc[df['Age'] > 64, 'Age']
+train.head()
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Survived</th>
+      <th>Pclass</th>
+      <th>Sex</th>
+      <th>Age</th>
+      <th>SibSp</th>
+      <th>Parch</th>
+      <th>Fare</th>
+      <th>Embarked</th>
+      <th>Title</th>
+      <th>AgeCorr</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>7.2500</td>
+      <td>S</td>
+      <td>1</td>
+      <td>(16.0, 32.0]</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>0</td>
+      <td>71.2833</td>
+      <td>C</td>
+      <td>3</td>
+      <td>(32.0, 48.0]</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>1</td>
+      <td>3</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>7.9250</td>
+      <td>S</td>
+      <td>2</td>
+      <td>(16.0, 32.0]</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>0</td>
+      <td>53.1000</td>
+      <td>S</td>
+      <td>3</td>
+      <td>(32.0, 48.0]</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>8.0500</td>
+      <td>S</td>
+      <td>1</td>
+      <td>(32.0, 48.0]</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+train = train.drop(['AgeCorr'], axis=1)
+complete = [train, test]
+train.head()
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Survived</th>
+      <th>Pclass</th>
+      <th>Sex</th>
+      <th>Age</th>
+      <th>SibSp</th>
+      <th>Parch</th>
+      <th>Fare</th>
+      <th>Embarked</th>
+      <th>Title</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>7.2500</td>
+      <td>S</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>0</td>
+      <td>71.2833</td>
+      <td>C</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>1</td>
+      <td>3</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>7.9250</td>
+      <td>S</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>0</td>
+      <td>53.1000</td>
+      <td>S</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>2</td>
       <td>0</td>
       <td>0</td>
       <td>8.0500</td>
