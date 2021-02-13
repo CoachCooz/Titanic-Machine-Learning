@@ -1,7 +1,5 @@
 # Machine Learning and the Titanic
 
-Import packages
-
 
 ```python
 import pandas as pd
@@ -20,14 +18,12 @@ from sklearn.linear_model import SGDClassifier
 from sklearn.tree import DecisionTreeClassifier
 ```
 
-Import data
-
 
 ```python
 train = pd.read_csv('train.csv')
 test = pd.read_csv('test.csv')
 gender = pd.read_csv('gender_submission.csv')
-complete_df = [train, test, gender]
+complete = [train, test, gender]
 ```
 
 
@@ -494,7 +490,7 @@ train.describe(include=['O'])
     </tr>
     <tr>
       <td>top</td>
-      <td>Weir, Col. John</td>
+      <td>Panula, Mr. Jaako Arnold</td>
       <td>male</td>
       <td>CA. 2343</td>
       <td>B96 B98</td>
@@ -754,6 +750,530 @@ train[['Parch', 'Survived']].groupby(['Parch'], as_index=False).mean().sort_valu
       <td>6</td>
       <td>6</td>
       <td>0.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+survived = sns.FacetGrid(train, col='Survived')
+survived.map(plt.hist, 'Age', bins=15)
+```
+
+
+
+
+    <seaborn.axisgrid.FacetGrid at 0x7fef871bb510>
+
+
+
+
+![png](output_13_1.png)
+
+
+
+```python
+grid = sns.FacetGrid(train, col='Survived', row='Pclass', height=2.5, aspect=2.0)
+grid.map(plt.hist, 'Age', alpha=.5, bins=15)
+grid.add_legend();
+```
+
+
+![png](output_14_0.png)
+
+
+
+```python
+grid_1 = sns.FacetGrid(train, row='Embarked', height=2.5, aspect=2.0)
+grid_1.map(sns.pointplot, 'Pclass', 'Survived', 'Sex', palette='deep')
+grid_1.add_legend()
+```
+
+    /Users/acusiobivona/opt/anaconda3/lib/python3.7/site-packages/seaborn/axisgrid.py:715: UserWarning: Using the pointplot function without specifying `order` is likely to produce an incorrect plot.
+      warnings.warn(warning)
+    /Users/acusiobivona/opt/anaconda3/lib/python3.7/site-packages/seaborn/axisgrid.py:720: UserWarning: Using the pointplot function without specifying `hue_order` is likely to produce an incorrect plot.
+      warnings.warn(warning)
+
+
+
+
+
+    <seaborn.axisgrid.FacetGrid at 0x7fef87a2ba90>
+
+
+
+
+![png](output_15_2.png)
+
+
+
+```python
+grid_2 = sns.FacetGrid(train, row='Embarked', col='Survived', height=2.5, aspect=2.0)
+grid_2.map(sns.barplot, 'Sex', 'Fare', alpha=.5, ci=None)
+grid_2.add_legend()
+```
+
+    /Users/acusiobivona/opt/anaconda3/lib/python3.7/site-packages/seaborn/axisgrid.py:715: UserWarning: Using the barplot function without specifying `order` is likely to produce an incorrect plot.
+      warnings.warn(warning)
+
+
+
+
+
+    <seaborn.axisgrid.FacetGrid at 0x7fef8803b2d0>
+
+
+
+
+![png](output_16_2.png)
+
+
+
+```python
+train = train.drop(['Ticket', 'Cabin'], axis=1)
+test = test.drop(['Ticket', 'Cabin'], axis=1)
+complete = [train, test]
+```
+
+
+```python
+for df in complete:
+    df['Title'] = df.Name.str.extract(' ([A-Za-z]+)\.', expand=False)
+
+pd.crosstab(train['Title'], train['Sex'])
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Sex</th>
+      <th>female</th>
+      <th>male</th>
+    </tr>
+    <tr>
+      <th>Title</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Capt</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>Col</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>Countess</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Don</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>Dr</td>
+      <td>1</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>Jonkheer</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>Lady</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Major</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>Master</td>
+      <td>0</td>
+      <td>40</td>
+    </tr>
+    <tr>
+      <td>Miss</td>
+      <td>182</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Mlle</td>
+      <td>2</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Mme</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Mr</td>
+      <td>0</td>
+      <td>517</td>
+    </tr>
+    <tr>
+      <td>Mrs</td>
+      <td>125</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Ms</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Rev</td>
+      <td>0</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>Sir</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+for df in complete:
+    df['Title'] = df['Title'].replace(['Lady', 'Countess','Capt', 'Col',\
+    'Don', 'Dr', 'Major', 'Rev', 'Sir', 'Jonkheer', 'Dona'], 'Rare')
+
+    df['Title'] = df['Title'].replace('Mlle', 'Miss')
+    df['Title'] = df['Title'].replace('Ms', 'Miss')
+    df['Title'] = df['Title'].replace('Mme', 'Mrs')
+    
+train[['Title', 'Survived']].groupby(['Title'], as_index=False).mean()
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Title</th>
+      <th>Survived</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>Master</td>
+      <td>0.575000</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>Miss</td>
+      <td>0.702703</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Mr</td>
+      <td>0.156673</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Mrs</td>
+      <td>0.793651</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Rare</td>
+      <td>0.347826</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+mapping = {"Mr": 1, "Miss": 2, "Mrs": 3, "Master": 4, "Rare": 5}
+for df in complete:
+    df['Title'] = df['Title'].map(mapping)
+    df['Title'] = df['Title'].fillna(0)
+
+train.head()
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>PassengerId</th>
+      <th>Survived</th>
+      <th>Pclass</th>
+      <th>Name</th>
+      <th>Sex</th>
+      <th>Age</th>
+      <th>SibSp</th>
+      <th>Parch</th>
+      <th>Fare</th>
+      <th>Embarked</th>
+      <th>Title</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>3</td>
+      <td>Braund, Mr. Owen Harris</td>
+      <td>male</td>
+      <td>22.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>7.2500</td>
+      <td>S</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>Cumings, Mrs. John Bradley (Florence Briggs Th...</td>
+      <td>female</td>
+      <td>38.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>71.2833</td>
+      <td>C</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>3</td>
+      <td>1</td>
+      <td>3</td>
+      <td>Heikkinen, Miss. Laina</td>
+      <td>female</td>
+      <td>26.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>7.9250</td>
+      <td>S</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>4</td>
+      <td>1</td>
+      <td>1</td>
+      <td>Futrelle, Mrs. Jacques Heath (Lily May Peel)</td>
+      <td>female</td>
+      <td>35.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>53.1000</td>
+      <td>S</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>5</td>
+      <td>0</td>
+      <td>3</td>
+      <td>Allen, Mr. William Henry</td>
+      <td>male</td>
+      <td>35.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>8.0500</td>
+      <td>S</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+train = train.drop(['Name', 'PassengerId'], axis=1)
+test = test.drop(['Name'], axis=1)
+complete = [train, test]
+train.shape, test.shape
+```
+
+
+
+
+    ((891, 9), (418, 9))
+
+
+
+
+```python
+for df in complete:
+    df['Sex'] = df['Sex'].map( {'female': 1, 'male': 0} ).astype(int)
+
+train.head()
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Survived</th>
+      <th>Pclass</th>
+      <th>Sex</th>
+      <th>Age</th>
+      <th>SibSp</th>
+      <th>Parch</th>
+      <th>Fare</th>
+      <th>Embarked</th>
+      <th>Title</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>22.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>7.2500</td>
+      <td>S</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>38.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>71.2833</td>
+      <td>C</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>1</td>
+      <td>3</td>
+      <td>1</td>
+      <td>26.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>7.9250</td>
+      <td>S</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>35.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>53.1000</td>
+      <td>S</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>35.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>8.0500</td>
+      <td>S</td>
+      <td>1</td>
     </tr>
   </tbody>
 </table>
