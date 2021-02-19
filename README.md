@@ -490,10 +490,10 @@ train.describe(include=['O'])
     </tr>
     <tr>
       <td>top</td>
-      <td>Sage, Miss. Constance Gladys</td>
+      <td>Jardin, Mr. Jose Neto</td>
       <td>male</td>
-      <td>1601</td>
-      <td>C23 C25 C27</td>
+      <td>CA. 2343</td>
+      <td>G6</td>
       <td>S</td>
     </tr>
     <tr>
@@ -766,7 +766,7 @@ survived.map(plt.hist, 'Age', bins=15)
 
 
 
-    <seaborn.axisgrid.FacetGrid at 0x7fd1e8f68e10>
+    <seaborn.axisgrid.FacetGrid at 0x7f8926ad30d0>
 
 
 
@@ -801,7 +801,7 @@ grid_1.add_legend()
 
 
 
-    <seaborn.axisgrid.FacetGrid at 0x7fd1e9b1ac10>
+    <seaborn.axisgrid.FacetGrid at 0x7f892711bc90>
 
 
 
@@ -823,7 +823,7 @@ grid_2.add_legend()
 
 
 
-    <seaborn.axisgrid.FacetGrid at 0x7fd1e9d80b50>
+    <seaborn.axisgrid.FacetGrid at 0x7f8927a81150>
 
 
 
@@ -1291,7 +1291,7 @@ grid_3.add_legend()
 
 
 
-    <seaborn.axisgrid.FacetGrid at 0x7fd1ea652850>
+    <seaborn.axisgrid.FacetGrid at 0x7f892817cbd0>
 
 
 
@@ -1714,6 +1714,627 @@ train.head()
       <td>8.0500</td>
       <td>S</td>
       <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+for df in complete:
+    df['Family#'] = df['SibSp'] + df['Parch'] + 1
+
+train[['Family#', 'Survived']].groupby(['Family#'], as_index=False).mean().sort_values(by='Survived', 
+                                                                                          ascending=False)
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Family#</th>
+      <th>Survived</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>3</td>
+      <td>4</td>
+      <td>0.724138</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>3</td>
+      <td>0.578431</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>2</td>
+      <td>0.552795</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>7</td>
+      <td>0.333333</td>
+    </tr>
+    <tr>
+      <td>0</td>
+      <td>1</td>
+      <td>0.303538</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>5</td>
+      <td>0.200000</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>6</td>
+      <td>0.136364</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>8</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>11</td>
+      <td>0.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+for df in complete:
+    df['Alone'] = 0
+    df.loc[df['Family#'] == 1, 'Alone'] = 1
+
+train[['Alone', 'Survived']].groupby(['Alone'], as_index=False).mean()
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Alone</th>
+      <th>Survived</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>0</td>
+      <td>0.505650</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>1</td>
+      <td>0.303538</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+train = train.drop(['Parch', 'SibSp', 'Family#'], axis=1)
+test = test.drop(['Parch', 'SibSp', 'Family#'], axis=1)
+complete = [train, test]
+
+train.head()
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Survived</th>
+      <th>Pclass</th>
+      <th>Sex</th>
+      <th>Age</th>
+      <th>Fare</th>
+      <th>Embarked</th>
+      <th>Title</th>
+      <th>Alone</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>1</td>
+      <td>7.2500</td>
+      <td>S</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>71.2833</td>
+      <td>C</td>
+      <td>3</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>1</td>
+      <td>3</td>
+      <td>1</td>
+      <td>1</td>
+      <td>7.9250</td>
+      <td>S</td>
+      <td>2</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>53.1000</td>
+      <td>S</td>
+      <td>3</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>2</td>
+      <td>8.0500</td>
+      <td>S</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+for df in complete:
+    df['Age-Class'] = df.Age * df.Pclass
+
+train.loc[:, ['Age-Class', 'Age', 'Pclass']].head(10)
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Age-Class</th>
+      <th>Age</th>
+      <th>Pclass</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>3</td>
+      <td>1</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>3</td>
+      <td>1</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>6</td>
+      <td>2</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>3</td>
+      <td>1</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>3</td>
+      <td>3</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>3</td>
+      <td>1</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+port = train.Embarked.dropna().mode()[0]
+port
+```
+
+
+
+
+    'S'
+
+
+
+
+```python
+for df in complete:
+    df['Embarked'] = df['Embarked'].fillna(port)
+    
+train[['Embarked', 'Survived']].groupby(['Embarked'], as_index=False).mean().sort_values(by='Survived', 
+                                                                                         ascending=False)
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Embarked</th>
+      <th>Survived</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>C</td>
+      <td>0.553571</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>Q</td>
+      <td>0.389610</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>S</td>
+      <td>0.339009</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+for df in complete:
+    df['Embarked'] = df['Embarked'].map( {'S': 0, 'C': 1, 'Q': 2} ).astype(int)
+
+train.head()
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Survived</th>
+      <th>Pclass</th>
+      <th>Sex</th>
+      <th>Age</th>
+      <th>Fare</th>
+      <th>Embarked</th>
+      <th>Title</th>
+      <th>Alone</th>
+      <th>Age-Class</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>1</td>
+      <td>7.2500</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>71.2833</td>
+      <td>1</td>
+      <td>3</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>1</td>
+      <td>3</td>
+      <td>1</td>
+      <td>1</td>
+      <td>7.9250</td>
+      <td>0</td>
+      <td>2</td>
+      <td>1</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>53.1000</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>2</td>
+      <td>8.0500</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>6</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+test['Fare'].fillna(test['Fare'].dropna().median(), inplace=True)
+test.head()
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>PassengerId</th>
+      <th>Pclass</th>
+      <th>Sex</th>
+      <th>Age</th>
+      <th>Fare</th>
+      <th>Embarked</th>
+      <th>Title</th>
+      <th>Alone</th>
+      <th>Age-Class</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>892</td>
+      <td>3</td>
+      <td>0</td>
+      <td>2</td>
+      <td>7.8292</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>893</td>
+      <td>3</td>
+      <td>1</td>
+      <td>2</td>
+      <td>7.0000</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>894</td>
+      <td>2</td>
+      <td>0</td>
+      <td>3</td>
+      <td>9.6875</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>895</td>
+      <td>3</td>
+      <td>0</td>
+      <td>1</td>
+      <td>8.6625</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>896</td>
+      <td>3</td>
+      <td>1</td>
+      <td>1</td>
+      <td>12.2875</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>3</td>
     </tr>
   </tbody>
 </table>
