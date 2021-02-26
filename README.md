@@ -490,9 +490,9 @@ train.describe(include=['O'])
     </tr>
     <tr>
       <td>top</td>
-      <td>Jardin, Mr. Jose Neto</td>
+      <td>Brown, Mrs. James Joseph (Margaret Tobin)</td>
       <td>male</td>
-      <td>CA. 2343</td>
+      <td>347082</td>
       <td>G6</td>
       <td>S</td>
     </tr>
@@ -766,7 +766,7 @@ survived.map(plt.hist, 'Age', bins=15)
 
 
 
-    <seaborn.axisgrid.FacetGrid at 0x7f8926ad30d0>
+    <seaborn.axisgrid.FacetGrid at 0x7f9f1e092b10>
 
 
 
@@ -801,7 +801,7 @@ grid_1.add_legend()
 
 
 
-    <seaborn.axisgrid.FacetGrid at 0x7f892711bc90>
+    <seaborn.axisgrid.FacetGrid at 0x7f9f1edaf2d0>
 
 
 
@@ -823,7 +823,7 @@ grid_2.add_legend()
 
 
 
-    <seaborn.axisgrid.FacetGrid at 0x7f8927a81150>
+    <seaborn.axisgrid.FacetGrid at 0x7f9f1f27c450>
 
 
 
@@ -1291,7 +1291,7 @@ grid_3.add_legend()
 
 
 
-    <seaborn.axisgrid.FacetGrid at 0x7f892817cbd0>
+    <seaborn.axisgrid.FacetGrid at 0x7f9f1f98f690>
 
 
 
@@ -2339,6 +2339,547 @@ test.head()
   </tbody>
 </table>
 </div>
+
+
+
+
+```python
+train['FareGroups'] = pd.qcut(train['Fare'], 4)
+train[['FareGroups', 'Survived']].groupby(['FareGroups'], as_index=False).mean().sort_values(by='FareGroups', 
+                                                                                             ascending=True)
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>FareGroups</th>
+      <th>Survived</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>(-0.001, 7.91]</td>
+      <td>0.197309</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>(7.91, 14.454]</td>
+      <td>0.303571</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>(14.454, 31.0]</td>
+      <td>0.454955</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>(31.0, 512.329]</td>
+      <td>0.581081</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+for df in complete:
+    df.loc[df['Fare'] <= 7.91, 'Fare'] = 0
+    df.loc[(df['Fare'] > 7.91) & (df['Fare'] <= 14.454), 'Fare'] = 1
+    df.loc[(df['Fare'] > 14.454) & (df['Fare'] <= 31), 'Fare']   = 2
+    df.loc[ df['Fare'] > 31, 'Fare'] = 3
+    df['Fare'] = df['Fare'].astype(int)
+
+train = train.drop(['FareGroups'], axis=1)
+complete = [train, test]
+    
+train.head(10)
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Survived</th>
+      <th>Pclass</th>
+      <th>Sex</th>
+      <th>Age</th>
+      <th>Fare</th>
+      <th>Embarked</th>
+      <th>Title</th>
+      <th>Alone</th>
+      <th>Age-Class</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>3</td>
+      <td>1</td>
+      <td>3</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>1</td>
+      <td>3</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>2</td>
+      <td>1</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>3</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>2</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>3</td>
+      <td>3</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>1</td>
+      <td>3</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>0</td>
+      <td>2</td>
+      <td>1</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+test.head(10)
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>PassengerId</th>
+      <th>Pclass</th>
+      <th>Sex</th>
+      <th>Age</th>
+      <th>Fare</th>
+      <th>Embarked</th>
+      <th>Title</th>
+      <th>Alone</th>
+      <th>Age-Class</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>892</td>
+      <td>3</td>
+      <td>0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>893</td>
+      <td>3</td>
+      <td>1</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>894</td>
+      <td>2</td>
+      <td>0</td>
+      <td>3</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>895</td>
+      <td>3</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>896</td>
+      <td>3</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>897</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>898</td>
+      <td>3</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>899</td>
+      <td>2</td>
+      <td>0</td>
+      <td>1</td>
+      <td>2</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>900</td>
+      <td>3</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>3</td>
+      <td>1</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td>901</td>
+      <td>3</td>
+      <td>0</td>
+      <td>1</td>
+      <td>2</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+X_train = train.drop("Survived", axis=1)
+Y_train = train["Survived"]
+X_test  = test.drop("PassengerId", axis=1).copy()
+X_train.shape, Y_train.shape, X_test.shape
+```
+
+
+
+
+    ((891, 8), (891,), (418, 8))
+
+
+
+
+```python
+logistic = LogisticRegression()
+logistic.fit(X_train, Y_train)
+Y_pred = logistic.predict(X_test)
+acc_log = round(logistic.score(X_train, Y_train) * 100, 2)
+acc_log
+```
+
+
+
+
+    80.36
+
+
+
+
+```python
+coeff = pd.DataFrame(train.columns.delete(0))
+coeff.columns = ['Feature']
+coeff["Correlation"] = pd.Series(logistic.coef_[0])
+
+coeff.sort_values(by='Correlation', ascending=False)
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Feature</th>
+      <th>Correlation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Sex</td>
+      <td>2.201619</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>Title</td>
+      <td>0.397888</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Age</td>
+      <td>0.287011</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Embarked</td>
+      <td>0.261473</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>Alone</td>
+      <td>0.126553</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Fare</td>
+      <td>-0.086655</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>Age-Class</td>
+      <td>-0.311069</td>
+    </tr>
+    <tr>
+      <td>0</td>
+      <td>Pclass</td>
+      <td>-0.750700</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+svc = SVC()
+svc.fit(X_train, Y_train)
+Y_pred = svc.predict(X_test)
+acc_svc = round(svc.score(X_train, Y_train) * 100, 2)
+acc_svc
+```
+
+
+
+
+    78.23
+
+
+
+
+```python
+knn = KNeighborsClassifier(n_neighbors = 4)
+knn.fit(X_train, Y_train)
+Y_pred = knn.predict(X_test)
+acc_knn = round(knn.score(X_train, Y_train) * 100, 2)
+acc_knn
+```
+
+
+
+
+    83.84
 
 
 
