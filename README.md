@@ -490,7 +490,7 @@ train.describe(include=['O'])
     </tr>
     <tr>
       <td>top</td>
-      <td>Brown, Mrs. James Joseph (Margaret Tobin)</td>
+      <td>Kiernan, Mr. Philip</td>
       <td>male</td>
       <td>347082</td>
       <td>G6</td>
@@ -766,7 +766,7 @@ survived.map(plt.hist, 'Age', bins=15)
 
 
 
-    <seaborn.axisgrid.FacetGrid at 0x7f9f1e092b10>
+    <seaborn.axisgrid.FacetGrid at 0x7fba9554f690>
 
 
 
@@ -801,7 +801,7 @@ grid_1.add_legend()
 
 
 
-    <seaborn.axisgrid.FacetGrid at 0x7f9f1edaf2d0>
+    <seaborn.axisgrid.FacetGrid at 0x7fba95798210>
 
 
 
@@ -823,7 +823,7 @@ grid_2.add_legend()
 
 
 
-    <seaborn.axisgrid.FacetGrid at 0x7f9f1f27c450>
+    <seaborn.axisgrid.FacetGrid at 0x7fba962e2210>
 
 
 
@@ -1291,7 +1291,7 @@ grid_3.add_legend()
 
 
 
-    <seaborn.axisgrid.FacetGrid at 0x7f9f1f98f690>
+    <seaborn.axisgrid.FacetGrid at 0x7fba969b5510>
 
 
 
@@ -2880,6 +2880,197 @@ acc_knn
 
 
     83.84
+
+
+
+
+```python
+gaussian = GaussianNB()
+gaussian.fit(X_train, Y_train)
+Y_pred = gaussian.predict(X_test)
+acc_gaussian = round(gaussian.score(X_train, Y_train) * 100, 2)
+acc_gaussian
+```
+
+
+
+
+    72.28
+
+
+
+
+```python
+perceptron = Perceptron()
+perceptron.fit(X_train, Y_train)
+Y_pred = perceptron.predict(X_test)
+acc_perceptron = round(perceptron.score(X_train, Y_train) * 100, 2)
+acc_perceptron
+```
+
+
+
+
+    78.34
+
+
+
+
+```python
+linear_svc = LinearSVC()
+linear_svc.fit(X_train, Y_train)
+Y_pred = linear_svc.predict(X_test)
+acc_linear_svc = round(linear_svc.score(X_train, Y_train) * 100, 2)
+acc_linear_svc
+```
+
+    /Users/acusiobivona/.local/lib/python3.7/site-packages/sklearn/svm/_base.py:975: ConvergenceWarning: Liblinear failed to converge, increase the number of iterations.
+      "the number of iterations.", ConvergenceWarning)
+
+
+
+
+
+    79.01
+
+
+
+
+```python
+sgd = SGDClassifier()
+sgd.fit(X_train, Y_train)
+Y_pred = sgd.predict(X_test)
+acc_sgd = round(sgd.score(X_train, Y_train) * 100, 2)
+acc_sgd
+```
+
+
+
+
+    79.8
+
+
+
+
+```python
+tree = DecisionTreeClassifier()
+tree.fit(X_train, Y_train)
+Y_pred = tree.predict(X_test)
+acc_tree = round(tree.score(X_train, Y_train) * 100, 2)
+acc_tree
+```
+
+
+
+
+    86.76
+
+
+
+
+```python
+forest = RandomForestClassifier(n_estimators=100)
+forest.fit(X_train, Y_train)
+Y_pred = forest.predict(X_test)
+forest.score(X_train, Y_train)
+acc_forest = round(forest.score(X_train, Y_train) * 100, 2)
+acc_forest
+```
+
+
+
+
+    86.76
+
+
+
+
+```python
+models = pd.DataFrame({
+    'Model': ['Support Vector Machines', 'KNN', 'Logistic Regression', 
+              'Random Forest', 'Naive Bayes', 'Perceptron', 
+              'Stochastic Gradient Decent', 'Linear SVC', 
+              'Decision Tree'],
+    'Score': [acc_svc, acc_knn, acc_log, 
+              acc_forest, acc_gaussian, acc_perceptron, 
+              acc_sgd, acc_linear_svc, acc_tree]})
+models.sort_values(by='Score', ascending=False)
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Model</th>
+      <th>Score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>3</td>
+      <td>Random Forest</td>
+      <td>86.76</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>Decision Tree</td>
+      <td>86.76</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>KNN</td>
+      <td>83.84</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Logistic Regression</td>
+      <td>80.36</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>Stochastic Gradient Decent</td>
+      <td>79.80</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>Linear SVC</td>
+      <td>79.01</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>Perceptron</td>
+      <td>78.34</td>
+    </tr>
+    <tr>
+      <td>0</td>
+      <td>Support Vector Machines</td>
+      <td>78.23</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Naive Bayes</td>
+      <td>72.28</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 
 
 
