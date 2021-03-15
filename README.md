@@ -1,5 +1,7 @@
 # Machine Learning and the Titanic
 
+Import all potential packages
+
 
 ```python
 import pandas as pd
@@ -18,6 +20,8 @@ from sklearn.linear_model import SGDClassifier
 from sklearn.tree import DecisionTreeClassifier
 ```
 
+Separate data into train and test datframes and also create a third dataframe with the two combined
+
 
 ```python
 train = pd.read_csv('train.csv')
@@ -25,6 +29,8 @@ test = pd.read_csv('test.csv')
 gender = pd.read_csv('gender_submission.csv')
 complete = [train, test, gender]
 ```
+
+Print the columns so we can see all available features
 
 
 ```python
@@ -34,6 +40,8 @@ print(train.columns.values)
     ['PassengerId' 'Survived' 'Pclass' 'Name' 'Sex' 'Age' 'SibSp' 'Parch'
      'Ticket' 'Fare' 'Cabin' 'Embarked']
 
+
+Show the first 5 entries to make sure data was loaded correctly
 
 
 ```python
@@ -157,6 +165,8 @@ train.head()
 
 
 
+Do the same thing with the test data
+
 
 ```python
 test.head()
@@ -273,10 +283,12 @@ test.head()
 
 
 
+Check to see if there are any null values
+
 
 ```python
 train.info()
-print('_'*20)
+print('_'*30)
 test.info()
 ```
 
@@ -297,7 +309,7 @@ test.info()
     Embarked       889 non-null object
     dtypes: float64(2), int64(5), object(5)
     memory usage: 83.7+ KB
-    ____________________
+    ______________________________
     <class 'pandas.core.frame.DataFrame'>
     RangeIndex: 418 entries, 0 to 417
     Data columns (total 11 columns):
@@ -315,6 +327,8 @@ test.info()
     dtypes: float64(2), int64(4), object(5)
     memory usage: 36.0+ KB
 
+
+Use `describe()` to see general statistics about the data
 
 
 ```python
@@ -438,6 +452,8 @@ train.describe()
 
 
 
+Now doing the same thing, but only for the features that are object type
+
 
 ```python
 train.describe(include=['O'])
@@ -490,7 +506,7 @@ train.describe(include=['O'])
     </tr>
     <tr>
       <td>top</td>
-      <td>Kiernan, Mr. Philip</td>
+      <td>Yousif, Mr. Wazli</td>
       <td>male</td>
       <td>347082</td>
       <td>G6</td>
@@ -509,6 +525,8 @@ train.describe(include=['O'])
 </div>
 
 
+
+The next few cells will create pivot tables to compare certain features to each other. This first one is between `'Pclass'` and `'Survived'`
 
 
 ```python
@@ -562,6 +580,8 @@ train[['Pclass', 'Survived']].groupby(['Pclass'], as_index=False).mean().sort_va
 </div>
 
 
+
+Pivot table between `'Sex'` and `'Survived'`
 
 
 ```python
@@ -766,12 +786,12 @@ survived.map(plt.hist, 'Age', bins=15)
 
 
 
-    <seaborn.axisgrid.FacetGrid at 0x7fba9554f690>
+    <seaborn.axisgrid.FacetGrid at 0x7f88fc8c4290>
 
 
 
 
-![png](output_13_1.png)
+![png](output_23_1.png)
 
 
 
@@ -782,7 +802,7 @@ grid.add_legend();
 ```
 
 
-![png](output_14_0.png)
+![png](output_24_0.png)
 
 
 
@@ -801,12 +821,12 @@ grid_1.add_legend()
 
 
 
-    <seaborn.axisgrid.FacetGrid at 0x7fba95798210>
+    <seaborn.axisgrid.FacetGrid at 0x7f88fd4ae210>
 
 
 
 
-![png](output_15_2.png)
+![png](output_25_2.png)
 
 
 
@@ -823,12 +843,12 @@ grid_2.add_legend()
 
 
 
-    <seaborn.axisgrid.FacetGrid at 0x7fba962e2210>
+    <seaborn.axisgrid.FacetGrid at 0x7f88fd94c890>
 
 
 
 
-![png](output_16_2.png)
+![png](output_26_2.png)
 
 
 
@@ -1291,12 +1311,12 @@ grid_3.add_legend()
 
 
 
-    <seaborn.axisgrid.FacetGrid at 0x7fba969b5510>
+    <seaborn.axisgrid.FacetGrid at 0x7f88fdd86c10>
 
 
 
 
-![png](output_23_1.png)
+![png](output_33_1.png)
 
 
 
@@ -2931,7 +2951,7 @@ acc_linear_svc
 
 
 
-    79.01
+    78.9
 
 
 
@@ -2947,7 +2967,7 @@ acc_sgd
 
 
 
-    79.8
+    78.11
 
 
 
@@ -3044,14 +3064,9 @@ models.sort_values(by='Score', ascending=False)
       <td>80.36</td>
     </tr>
     <tr>
-      <td>6</td>
-      <td>Stochastic Gradient Decent</td>
-      <td>79.80</td>
-    </tr>
-    <tr>
       <td>7</td>
       <td>Linear SVC</td>
-      <td>79.01</td>
+      <td>78.90</td>
     </tr>
     <tr>
       <td>5</td>
@@ -3062,6 +3077,11 @@ models.sort_values(by='Score', ascending=False)
       <td>0</td>
       <td>Support Vector Machines</td>
       <td>78.23</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>Stochastic Gradient Decent</td>
+      <td>78.11</td>
     </tr>
     <tr>
       <td>4</td>
