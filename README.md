@@ -631,6 +631,8 @@ train[['Sex', 'Survived']].groupby(['Sex'], as_index=False).mean().sort_values(
 
 
 
+Pivot table between `'SibSp'` and `'Survived'`
+
 
 ```python
 train[['SibSp', 'Survived']].groupby(['SibSp'], as_index=False).mean().sort_values(
@@ -703,6 +705,8 @@ train[['SibSp', 'Survived']].groupby(['SibSp'], as_index=False).mean().sort_valu
 </div>
 
 
+
+Pivot table between `'Parch'` and `'Survived'`
 
 
 ```python
@@ -777,6 +781,8 @@ train[['Parch', 'Survived']].groupby(['Parch'], as_index=False).mean().sort_valu
 
 
 
+Create histograms to analyze which age groups (if any) are noticeable for not surviving or surviving
+
 
 ```python
 survived = sns.FacetGrid(train, col='Survived')
@@ -791,8 +797,10 @@ survived.map(plt.hist, 'Age', bins=15)
 
 
 
-![png](output_23_1.png)
+![png](output_26_1.png)
 
+
+Create another set of histograms, this time comparing the ages of passenegers in each class, as well as seeing survival success for each class.
 
 
 ```python
@@ -802,8 +810,10 @@ grid.add_legend();
 ```
 
 
-![png](output_24_0.png)
+![png](output_28_0.png)
 
+
+Now using a point plot, comparing survival between men and women for each class, while considering from where they embarked.
 
 
 ```python
@@ -826,8 +836,10 @@ grid_1.add_legend()
 
 
 
-![png](output_25_2.png)
+![png](output_30_2.png)
 
+
+Now back to using histograms to compare the relationships between point of embarkation, sex, fare(cost of ticket), and survival.
 
 
 ```python
@@ -848,7 +860,7 @@ grid_2.add_legend()
 
 
 
-![png](output_26_2.png)
+![png](output_32_2.png)
 
 
 
@@ -1316,7 +1328,7 @@ grid_3.add_legend()
 
 
 
-![png](output_33_1.png)
+![png](output_39_1.png)
 
 
 
